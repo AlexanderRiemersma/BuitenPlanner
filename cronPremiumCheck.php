@@ -65,6 +65,7 @@ echo  'succes ' , $email;
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
 
+
     }
 }
 }
