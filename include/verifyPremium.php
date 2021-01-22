@@ -1,7 +1,7 @@
 <?php
 
 if(isset($_GET['pkey'])){
-    $pkey =$_GET['pkey'];
+    $pkey = $_GET['pkey'];
 
 
     $mysqli = NEW MySQLi ('localhost','deb85590_buitenplanner','$KT^8L4qiRDL!e','deb85590_buitenplanner');
@@ -24,6 +24,8 @@ if(isset($_GET['pkey'])){
 }else{
     die("oeps er is iets mis gegaan");
 }
+header("Location: ../index.php?=succes");
+
 ?>
 <!doctype html>
 <html lang="en">

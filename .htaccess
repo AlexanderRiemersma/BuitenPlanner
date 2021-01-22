@@ -1,3 +1,6 @@
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+#RewriteCond %{QUERY_STRING}  ^task=view$ [NC]
+#RewriteRule ^(.*)$ $1? [R=301,L]

@@ -43,7 +43,7 @@ if ($premium == 1){
     $premiumTab =' <button type="button" class="btn  btn-primary" disabled>Je hebt al premium!</button>
 ';
 }else{
-   $premiumTab =' <a type="button" class="btn btn-primary" href="include/premiumCode">Klik hier</a>';
+   $premiumTab =' <a type="button" class="btn btn-primary" href="include/premiumCode">Premium account</a>';
 
 }
 
@@ -137,7 +137,7 @@ if ($premium == 1){
                     <p class="card-text">Beheer de activiteiten.<br>(maken, bekijken, bewerken, verwijderen)   </p>
                     <!-- Button trigger modal activiteit maken -->
 <!--                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#activiteitMaken">Maken</button>-->
-                    <a type="button" class="btn btn-primary" href="include/createActivity">Klik hier</a>
+                    <a type="button" class="btn btn-primary" href="include/createActivity">Activiteiten beheren</a>
                 </div>
             </div>
         </div>
@@ -190,12 +190,18 @@ if ($premium == 1){
                 <button class="btn btn-outline-danger mr-5" onclick="deleteAccount()">Verwijder account</button>
                 <script>
                     function deleteAccount() {
-                        //confirm question
-                        confirm("Weet u het zeker?");
-                        //open the php script to delete account
-                        window.location.replace("include/deleteAccount.php");
+
+                        var r = confirm("Weet u het zeker?");
+                        if (r == true) {
+                            window.location.replace("include/deleteAccount.php");
+                        } else {
+
+                        }
+
                     }
+
                 </script>
+
 
                 <a class="btn btn-outline-success my-2 my-sm-0 mr-3" href="include/changePassword.php">verander wachtwoord</a>
 
@@ -239,14 +245,12 @@ if ($premium == 1){
     </div>
 </div>
 
-
-
 <!--footer-->
     <div class="container">
-        <footer class=" mt-5   text-center rounded" >
+        <footer class=" mt-3   text-center rounded" >
             <div class="row background1 rounded  pt-1">
                 <div class="col ">
-                    <small>Version: Beta</small>
+                    <small>Version: 1.1</small>
                 </div>
                 <div class="col">
                     <p> <strong> By: </strong> Alexander Riemersma</p>

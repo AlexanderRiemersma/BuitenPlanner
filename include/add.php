@@ -1,10 +1,17 @@
 <?php
-
 session_start();
 if (!isset($_SESSION['loggedin'])) {
     header('Location: index.php');
     exit;
 }
+
+
+$dbhost = 'localhost';
+$dbuser = 'deb85590_buitenplanner';
+$dbpass = '$KT^8L4qiRDL!e';
+$dbname = 'deb85590_buitenplanner';
+
+
 include 'db.php';
 require 'config.php';
 
@@ -22,27 +29,30 @@ $premium = $account['premium'];
 // Check If form submitted, insert form data into users table.
 if (isset($_POST['Submit'])) {
 
-
+    $nameActivity =  htmlspecialchars(ucfirst($_POST['name']));
     //declaring variables
-    $nameActivity = ucfirst($_POST['name']);
-    $placeActivity = ucfirst($_POST['place']);
+//    $nameActivity = ucfirst($_POST['name']);
+    $placeActivity = $location;
     $durationActivity = $_POST['duration'];
 
     $repeat = $_POST['repeat'];
-    $temp_c = $_POST['temp_c'];
-    $feelC = $_POST['feelC'];
+    $min_temp_c = $_POST['min_temp_c'];
+    $max_temp_c = $_POST['max_temp_c'];
 
-    $wind_kph = $_POST['wind_kph'];
-    $wind_degree = $_POST['wind_degree'];
-    $cloud = $_POST['cloud'];
+    $min_feelslike_c = $_POST['min_feelslike_c'];
+    $max_feelslike_c = $_POST['max_feelslike_c'];
+
+    $min_wind_kph = $_POST['min_wind_kph'];
+    $max_wind_kph = $_POST['max_wind_kph'];
+
+    $min_cloud = $_POST['min_cloud'];
+    $max_cloud = $_POST['max_cloud'];
 
     $wind_dir = $_POST['wind_dir'];
-    $humidity = $_POST['humidity'];
-    $presure_mb = $_POST['presure_mb'];
 
-    $uv = $_POST['uv'];
-    $gust_kph = $_POST['gust_kph'];
-    $precip_mm = $_POST['precip_mm'];
+    $min_precip_mm = $_POST['min_precip_mm'];
+    $max_precip_mm = $_POST['max_precip_mm'];
+
 
 
     //database conection
@@ -57,19 +67,6 @@ if (isset($_POST['Submit'])) {
     $placeActivity = $mysqli->real_escape_string($placeActivity);
     $durationActivity = $mysqli->real_escape_string($durationActivity);
 
-    $temp_c = $mysqli->real_escape_string($temp_c);
-    $feelC = $mysqli->real_escape_string($feelC);
-    $wind_kph = $mysqli->real_escape_string($wind_kph);
-
-    $wind_degree = $mysqli->real_escape_string($wind_degree);
-    $cloud = $mysqli->real_escape_string($cloud);
-    $wind_dir = $mysqli->real_escape_string($wind_dir);
-
-    $humidity = $mysqli->real_escape_string($humidity);
-    $uv = $mysqli->real_escape_string($uv);
-    $gust_kph = $mysqli->real_escape_string($gust_kph);
-    $precip_mm = $mysqli->real_escape_string($precip_mm);
-
 
     $servername = "localhost";
     $username = "deb85590_buitenplanner";
@@ -83,28 +80,14 @@ if (isset($_POST['Submit'])) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $sql = ("INSERT INTO activity (user_ID, name_activity, place_activity, duration_activity, repeat_activity, temp_c_activity, uv_activity, wind_kph_activity, wind_degree_activity, wind_dir_activity, cloud_activity, humidity_activity, gust_kph_activity, feelslike_c_activity, pressure_mb_activity , precip_mm_activity, email) VALUES ('$user_ID','$nameActivity','$placeActivity','$durationActivity','$repeat','$temp_c','$uv','$wind_kph','$wind_degree','$wind_dir','$cloud','$humidity','$gust_kph','$feelC','$presure_mb','$precip_mm','$email')");
+    $sql = ("INSERT INTO activity (user_ID, name_activity, place_activity, duration_activity, repeat_activity, min_temp_c_activity, max_temp_c_activity , min_wind_kph_activity,max_wind_kph_activity, wind_dir_activity, min_cloud_activity, min_feelslike_c_activity, max_feelslike_c_activity, min_precip_mm_activity, email , max_cloud_activity, max_precip_mm_activity) VALUES
+                                ('$user_ID','$nameActivity','$placeActivity','$durationActivity','$repeat','$min_temp_c','$max_temp_c','$min_wind_kph','$max_wind_kph','$wind_dir','$min_cloud','$min_feelslike_c','$max_feelslike_c','$min_precip_mm','$email', '$max_cloud','$max_precip_mm')");
 
     if ($conn->query($sql) === TRUE) {
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
     $conn->close();
-if ($sql){
-    //add location to Local weather if not exist
-    $servername = "localhost";
-    $username = "deb85590_buitenplanner";
-    $password = '$KT^8L4qiRDL!e';
-    $dbname = "deb85590_buitenplanner";
-
-// Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    $sql = ("INSERT INTO localwheater (place) VALUES ('$placeActivity' )");
-    if ($conn->query($sql) === TRUE) {
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-}
 
     header('Location: createActivity');
 

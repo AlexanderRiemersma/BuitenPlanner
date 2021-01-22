@@ -1,55 +1,73 @@
 <?php
+session_start();
+if (!isset($_SESSION['loggedin'])) {
+    header('Location: index.php');
+    exit;
+}
+
+include 'db.php';
+
+require 'config.php';
+
+$db = new db($dbhost, $dbuser, $dbpass, $dbname);
+$account = $db->query('SELECT * FROM users WHERE email = ? ', $_SESSION['name'])->fetchArray();
+
+$name = $account['name'];
+$email = $account['email'];
+$location = $account['location'];
+
+
 if (isset($_POST['submit'])) {
     //defining post variables
-    $id = $_POST['id'];
+    $id = $_POST['activityID'];
     $name = $_POST['name'];
-    $place = $_POST['place'];
+
+    $place = $location;
     $duration = $_POST ['duration'];
     $repeat = $_POST['repeat'];
-    $temp_c = $_POST['temp_c'];
-    $feelslike_c = $_POST['feelC'];
-    $wind_kph = $_POST['wind_kph'];
-    $humidity = $_POST['humidity'];
+    $min_temp_c = $_POST['min_temp_c'];
+    $max_temp_c = $_POST['max_temp_c'];
+
+    $min_feelslike_c = $_POST['min_feelslike_c'];
+    $max_feelslike_c = $_POST['max_feelslike_c'];
+
+    $min_wind_kph = $_POST['min_wind_kph'];
+    $max_wind_kph = $_POST['max_wind_kph'];
+
+    $min_cloud = $_POST['min_cloud'];
+    $max_cloud = $_POST['max_cloud'];
+
     $wind_dir = $_POST['wind_dir'];
-    $presure_mb = $_POST['presure_mb'];
-    $wind_degree = $_POST['wind_degree'];
-    $gust_kph = $_POST['gust_kph'];
-    $precip_mm = $_POST['precip_mm'];
-    $cloud = $_POST['cloud'];
-    $uv = $_POST['uv'];
+
+    $min_precip_mm = $_POST['min_precip_mm'];
+    $max_precip_mm = $_POST['max_precip_mm'];
+
 
     //creating connection
-    require 'config.php';
+    $databaseHost = 'localhost';
+    $databaseName = 'deb85590_buitenplanner';
+    $databaseUsername = 'deb85590_buitenplanner';
+    $databasePassword = '$KT^8L4qiRDL!e';
 
-    $conn = mysqli_connect($servername, $username, $password, $dbname);
+    // Create connection
+    $conn = new mysqli($databaseHost, $databaseUsername, $databasePassword, $databaseName);
+// Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
 
     //update query
-    $result = mysqli_query($conn, "UPDATE activity SET name_activity='$name' ,place_activity='$place', duration_activity='$duration', repeat_activity='$repeat', temp_c_activity='$temp_c',feelslike_c_activity='$feelslike_c',wind_kph_activity='$wind_kph' ,humidity_activity='$humidity', wind_degree_activity='$wind_degree', wind_dir_activity='$wind_dir', pressure_mb_activity='$presure_mb', precip_mm_activity='$precip_mm', cloud_activity='$cloud' ,uv_activity='$uv' ,gust_kph_activity='$gust_kph' WHERE activity_ID=$id");
+    $sql ="UPDATE activity SET name_activity='$name', place_activity='$place' , duration_activity='$duration', repeat_activity='$repeat', min_temp_c_activity='$min_temp_c', max_temp_c_activity='$max_temp_c' , min_feelslike_c_activity='$min_feelslike_c', max_feelslike_c_activity='$max_feelslike_c', min_wind_kph_activity='$min_wind_kph' , max_wind_kph_activity='$max_wind_kph', wind_dir_activity='$wind_dir', min_precip_mm_activity='$min_precip_mm', max_precip_mm_activity='$max_precip_mm', min_cloud_activity='$min_cloud' , max_cloud_activity='$max_cloud'  WHERE activity_ID='$id' ";
 
-    if ($result){
-        //add location to Local weather if not exist
-        $servername = "localhost";
-        $username = "deb85590_buitenplanner";
-        $password = '$KT^8L4qiRDL!e';
-        $dbname = "deb85590_buitenplanner";
-
-// Create connection
-        $conn = new mysqli($servername, $username, $password, $dbname);
-        $sql = ("INSERT INTO localwheater (place) VALUES ('$place' )");
-        if ($conn->query($sql) === TRUE) {
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
+    if ($conn->query($sql) === TRUE) {
+        echo "Record updated successfully";
+    } else {
+        echo "Error updating record: " . $conn->error;
     }
+    $conn->close();
 
     //redirect to read
     header("Location: createActivity.php");
 
-    //if error show error
-    if (mysqli_connect_errno()) {
-        echo "Failed to connect to MySQL: " . mysqli_connect_error();
-        exit();
-    }
-
-
 }
+

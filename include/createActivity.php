@@ -51,6 +51,7 @@ if ($activityCount === 5){
     <meta name = "viewport" content = "width=device-width, initial-scale=1, shrink-to-fit=no" >
 
     <!--Bootstrap CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <link rel = "stylesheet" href = "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity = "sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin = "anonymous" >
 <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">-->
 
@@ -89,8 +90,17 @@ if ($activityCount === 5){
         ?>
     </div>
 </div>
+
 <div class="container text-center">
-    <table class="table table-striped bg-light rounded mt-5" >
+    <div class="container mt-5  ">
+        <div class="row" >
+            <div class=" bg-info col pl-2 pt-2 rounded text-center" >
+                <h4> <?php echo 'Welkom bij het activiteiten overzicht ', $name;?>!</h4>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-striped bg-light rounded mt-4" >
 
         <tr>
 <!--            <th>ID</th>-->
@@ -118,7 +128,7 @@ if ($activityCount === 5){
             }
 
 //            echo "<td>" . $activity['herhaling'] . ' keer', "</td>";
-            echo "<td><a href='editActivity.php?id=$activity[activity_ID]'>Edit</a>/ <a href='delete.php?id=$activity[activity_ID]'>Verwijderen</a> </td></tr>";
+            echo "<td><a href='editActivity.php?id=$activity[activity_ID]'>Bewerken</a>/ <a href='delete.php?id=$activity[activity_ID]'>Verwijderen</a> </td></tr>";
 
 
         }
@@ -141,105 +151,126 @@ if ($activityCount === 5){
                     <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="name" class="form-label">Naam van de activiteit</label>
-                        <input type="text" required class="form-control border border-primary " name="name"  placeholder="Vissen / Wandelen / Fietsen">
+                        <input type="text"  required class="form-control border border-primary " name="name"  placeholder="Vissen / Wandelen / Fietsen">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="place" class="form-label">Plaats</label>
-                        <input type="text"required class="form-control border border-primary" name="place"  placeholder="Sneek">
+                        <input type="text"disabled class="form-control border border-primary" name="place"  placeholder="<?php echo $location ?>" value="<?php  $location ?>">
                     </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                         <label for="duration" class="form-label">Duur</label>
-                        <input  type="time"  class="form-control border border-primary" name="duration"  >
+                        <input  type="time"  required class="form-control border border-primary" name="duration"  >
                     </div>
+
                         <div class="form-group col-md-6">
-                        <label for="repeat" class="form-label">Herhaling</label>
-                        <input  type="number"  class="form-control border border-primary" name="repeat" >
+                            <?php
+                            if ($premium == 0){
+                                echo '<label for="disabledTextInput" class="form-label">Herhaling</label>
+                        <input type="number" id="disabledTextInput" class="form-control" placeholder="1" > ';
+
+
+
+                            }else{
+                                echo '<label for="repeat" class="form-label">Herhaling</label>
+                        <input  type="number"  min="1" required class="form-control border border-primary" name="repeat"  value="1" placeholder="1" >';
+                            }
+                            ?>
                     </div>
                     </div>
 
                     <div class="form-row">
-                    <div class="form-group col-md-6">
-                    <label for="temp_c" class="form-label">Tempratuur in celcius</label>
-                        <input  type="number"  class="form-control border border-primary" name="temp_c"  >
+
+                    <div class="form-group col-md-3">
+                        <label  class="form-label">Tempratuur </label>
+                        <input  type="number" placeholder="min" required  class="form-control border border-primary" name="min_temp_c"  >
                     </div>
-                    <div class="form-group col-md-6">
-                    <label for="feelslike_c" class="form-label">gevoelsempratuur in celcius</label>
-                        <input  type="number"  class="form-control border border-primary" name="feelC" >
-                    </div>
+                        <div class="form-group col-md-3">
+                            <label  class="form-label">&#32; °C</label>
+                            <input  type="number" placeholder="max" required  class="form-control border border-primary" name="max_temp_c"  >
+                        </div>
+
+
+                        <div class="form-group col-md-3">
+                            <label  class="form-label">Gevoel </label>
+                            <input  type="number" placeholder="min" required  class="form-control border border-primary" name="min_feelslike_c"  >
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label  class="form-label"> &#32; °C</label>
+                            <input  type="number" placeholder="max" required  class="form-control border border-primary" name="max_feelslike_c"  >
+                        </div>
                     </div>
 
                     <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label  class="form-label">Wind snelheid </label>
+                            <input  type="number" placeholder="min" required  class="form-control border border-primary" name="min_wind_kph"  >
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label  class="form-label"> &#32; Km/u</label>
+                            <input  type="number" placeholder="max" required  class="form-control border border-primary" name="max_wind_kph"  >
+                        </div>
                         <div class="form-group col-md-6">
-                        <label for="feelslike_c" class="form-label">Windsnelheid in kph</label>
-                        <input type="number" class="form-control border border-primary" name="wind_kph" placeholder="Wind snelheid kph">
-                    </div>
-                        <div class="form-group col-md-6">
-                        <label for="feelslike_c" class="form-label">Luchtvochtigehid</label>
-                        <input type="number" name="humidity" class="form-control border border-primary"  placeholder="Luchtvochtigheid">
-                    </div>
-                    </div>
+                            <label for="feelslike_c" class="form-label">Wind richting</label>
+                            <select class="form-select border-primary" name="wind_dir" aria-label="Wind_dir">
+                                <option value="0" selected>Kies een windrichting</option>
+                                <option value="N">N</option>
+                                <option value="E">O</option>
+                                <option value="S">Z</option>
+                                <option value="W">W</option>
+
+                                <option value="NNE">NNO</option>
+                                <option value="NE">NO</option>
+                                <option value="ENE">ONO</option>
+                                <option value="ESE">OSO</option>
+
+                                <option value="SE">ZO</option>
+                                <option value="SSE">ZZO</option>
+                                <option value="SSW">ZZW</option>
+                                <option value="SW">ZW</option>
+
+                                <option value="WSW">WZW</option>
+                                <option value="WNW">WNW</option>
+                                <option value="NW">NW</option>
+                                <option value="NNW">NNW</option>
+                            </select>
 
 
+                        </div>
+
+
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label  class="form-label">Neerval </label>
+                                <input  type="number" placeholder="min" required  class="form-control border border-primary" name="min_precip_mm"  >
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label  class="form-label"> &#32; mm</label>
+                                <input  type="number" placeholder="max" required  class="form-control border border-primary" name="max_precip_mm"  >
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label  class="form-label">Wolkenveld </label>
+                                <input  type="number" placeholder="min" required  class="form-control border border-primary" name="min_cloud"  >
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label  class="form-label"> &#32; %</label>
+                                <input  type="number" placeholder="max" required  class="form-control border border-primary" name="max_cloud"  >
+                            </div>
+                        </div>
 <br>
-<!-- advanced options -->
-                    <a class="btn btn-primary" data-toggle="collapse" href="#advanced" role="button" aria-expanded="false" aria-controls="collapseExample">
-                        Geavanceerd
-                    </a>
-                    <button type="submit" name="Submit" class="btn btn-primary">Toevoegen</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sluiten</button>
-
-
-                    <div class="collapse" id="advanced">
-                        <div class="card card-body">
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="feelslike_c" class="form-label">Wind richting</label>
-                                    <input type="text" name="wind_dir" class="form-control border border-primary" placeholder="Wind richting">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="feelslike_c" class="form-label">Luchtdruk in MB</label>
-                                    <input type="number" name="presure_mb" class="form-control border border-primary" placeholder="Luchtdruk in MB">
-                                </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="feelslike_c" class="form-label">Wind graad</label>
-                                    <input type="number" class="form-control border border-primary" name="wind_degree" placeholder="Wind graad">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="feelslike_c" class="form-label">Wind stoten in kph</label>
-                                    <input type="number" name="gust_kph" class="form-control border border-primary"  placeholder="Wind stoten in kph">
-                                </div>
-                            </div>
-
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="feelslike_c" class="form-label">Neerval in mm</label>
-                                    <input type="number" class="form-control border border-primary" name="precip_mm" placeholder="Neerval in mm">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="feelslike_c" class="form-label">Wolkenveld in %</label>
-                                    <input type="number" name="cloud" class="form-control border border-primary"  placeholder="Wolkenveld in %">
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="feelslike_c" class="form-label">UV Index</label>
-                                    <input type="number" class="form-control border border-primary" name="uv" placeholder="UV Index">
-                                </div>
                             <input type="hidden" name="email" value="<?php $email; ?>">
-<br>
-            </div>
+                            <input type="hidden" name="userid" value="<?php $user_ID; ?>">
+                                <br>
             <div class="modal-footer">
-
+                <button type="submit" name="Submit" class="btn btn-primary">Toevoegen</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sluiten</button>
                 </form>
-
-
             </div>
         </div>
     </div>
